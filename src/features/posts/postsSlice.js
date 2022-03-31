@@ -1,39 +1,51 @@
-const { createSlice, nanoid } = require("@reduxjs/toolkit");
+const { createSlice, nanoid } = require('@reduxjs/toolkit')
 
 const initialState = [
-  { id: "1", title: "First Post", content: "Hello!" },
-  { id: "2", title: "Second Post", content: "Some More Content." }
-];
+  {
+    id: '1',
+    title: 'First Post',
+    content: 'Hello!',
+    userId: '1',
+  },
+  {
+    id: '2',
+    title: 'Second Post',
+    content: 'Some More Content.',
+    date: new Date().toISOString(),
+  },
+]
 
 const postsSlice = createSlice({
-  name: "posts",
+  name: 'posts',
   initialState,
   reducers: {
     postAdded: {
       reducer(state, action) {
-        state.push(action.payload);
+        state.push(action.payload)
       },
-      prepare(title, content) {
+      prepare(title, content, userId) {
         return {
           payload: {
             id: nanoid(),
+            date: new Date().toISOString(),
             title,
-            content
-          }
-        };
-      }
+            content,
+            user: userId,
+          },
+        }
+      },
     },
     postUpdated(state, action) {
-      const { id, title, content } = action.payload;
-      const existingPost = state.find((post) => post.id === id);
+      const { id, title, content } = action.payload
+      const existingPost = state.find((post) => post.id === id)
       if (existingPost) {
-        existingPost.title = title;
-        existingPost.content = content;
+        existingPost.title = title
+        existingPost.content = content
       }
-    }
-  }
-});
+    },
+  },
+})
 
-export const { postAdded, postUpdated } = postsSlice.actions;
+export const { postAdded, postUpdated } = postsSlice.actions
 
-export default postsSlice.reducer;
+export default postsSlice.reducer
